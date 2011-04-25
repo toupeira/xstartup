@@ -25,3 +25,14 @@ This is a simple program launcher meant to be used during session startup. Each 
 * Click on an application's cancel button to skip it
 * If no countdowns are left the window will automatically close
 
+## License
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 as
+published by the Free Software Foundation.
+
+## Author
+
+Markus Koller <markus-koller@gmx.ch>
+http://github.com/toupeira
+
