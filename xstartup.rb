@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 =begin
 
   xstartup 0.1 - Copyright 2006 Markus Koller
