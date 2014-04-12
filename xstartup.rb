@@ -122,11 +122,13 @@ class Popup < Gtk::Window
     @@items = []
     @@pending = 0
 
-    def self.items; @@items end
+    def self.items
+      @@items
+    end
 
     def initialize(window, item)
-      item.each do |key,value|
-        instance_variable_set('@'+key.to_s, value)
+      item.each do |key, value|
+        instance_variable_set("@#{key}", value)
       end
 
       @table = Gtk::Table.new(2, 3)
@@ -148,7 +150,7 @@ class Popup < Gtk::Window
       @button << icon
 
       # Name label
-      label = Gtk::Label.new("<span size='large'><b>#@name</b></span>")
+      label = Gtk::Label.new("<span size='large'><b>#{@name}</b></span>")
       label.use_markup = true
       label.set_alignment(0, 0.5)
       label.set_padding(5, 0)
@@ -186,9 +188,9 @@ class Popup < Gtk::Window
 
     def run
       if RUBY_PLATFORM =~ /mswin32/
-        system("start /b #@command")
+        system("start /b #{@command}")
       else
-        system("(#@command) &>/dev/null &")
+        system("(#{@command}) &>/dev/null &")
       end
 
       Gtk.timeout_remove(@id) if @id
@@ -256,7 +258,7 @@ class Settings < Gtk::Window
     view =  Gtk::TreeView.new(@list)
     view.reorderable = true
     view.rules_hint = true
-    view.signal_connect('row-activated') { |v,path,c| edit(path) }
+    view.signal_connect('row-activated') { |v, path, c| edit(path) }
     sw << view
 
     # Enabled column
@@ -265,14 +267,14 @@ class Settings < Gtk::Window
       row = @list.get_iter(path)
       row[ENABLED] ^= 1
     end
-    column = Gtk::TreeViewColumn.new('', render, :active => ENABLED)
+    column = Gtk::TreeViewColumn.new('', render, active: ENABLED)
     column.sort_column_id = ENABLED
     view.append_column(column)
 
     # Icon column
     render = Gtk::CellRendererPixbuf.new
     column = Gtk::TreeViewColumn.new('Icon', render)
-    column.set_cell_data_func(render) do |column, cell, model, row|
+    column.set_cell_data_func(render) do |col, cell, model, row|
       begin
         cell.pixbuf = Gdk::Pixbuf.new(row[ICON]).scale(20, 20)
       rescue
@@ -283,7 +285,7 @@ class Settings < Gtk::Window
 
     # Name column
     render = Gtk::CellRendererText.new
-    column = Gtk::TreeViewColumn.new('Name', render, :text => NAME)
+    column = Gtk::TreeViewColumn.new('Name', render, text: NAME)
     column.sort_column_id = NAME
     view.append_column(column)
 
@@ -291,13 +293,13 @@ class Settings < Gtk::Window
     render = Gtk::CellRendererText.new
     render.ellipsize = Pango::ELLIPSIZE_END
 
-    column = Gtk::TreeViewColumn.new('Command', render, :text => COMMAND)
+    column = Gtk::TreeViewColumn.new('Command', render, text: COMMAND)
     column.sort_column_id = COMMAND
     column.expand = true
     view.append_column(column)
 
     # Timeout column
-    column = Gtk::TreeViewColumn.new('Timeout', render, :text => TIMEOUT)
+    column = Gtk::TreeViewColumn.new('Timeout', render, text: TIMEOUT)
     column.sort_column_id = TIMEOUT
     view.append_column(column)
 
@@ -352,12 +354,12 @@ class Settings < Gtk::Window
     items = []
     @list.each do |model, path, row|
       items << {
-        :command   => row[COMMAND],
-        :name      => row[NAME],
-        :icon      => row[ICON],
-        :enabled   => row[ENABLED],
-        :condition => row[CONDITION],
-        :timeout   => row[TIMEOUT]
+        command:   row[COMMAND],
+        name:      row[NAME],
+        icon:      row[ICON],
+        enabled:   row[ENABLED],
+        condition: row[CONDITION],
+        timeout:   row[TIMEOUT],
       }
     end
     open(CONFIG, 'w') { |file| YAML.dump(items, file) }
@@ -372,10 +374,10 @@ class Settings < Gtk::Window
       row[COMMAND],
       row[ICON],
       row[TIMEOUT],
-      row[CONDITION]
+      row[CONDITION],
     )
     if values = dialog.run
-      values.each_with_index { |v,i| row[i] = v }
+      values.each_with_index { |v, i| row[i] = v }
     end
     dialog.destroy
   end
@@ -397,7 +399,7 @@ class Settings < Gtk::Window
           @command.text,
           @icon.filename,
           @timeout.value,
-          @condition.text
+          @condition.text,
         ]
       end
     end
