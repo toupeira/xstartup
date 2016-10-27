@@ -143,7 +143,7 @@ class Popup < Gtk::Window
       icon = Gtk::Image.new
       icon.set_size_request(32, 32)
       begin
-        icon.pixbuf = Gdk::Pixbuf.new(@icon).scale(32, 32)
+        icon.pixbuf = GdkPixbuf::Pixbuf.new(file: @icon).scale(32, 32)
       rescue
         icon.pixbuf = window.render_icon(Gtk::Stock::EXECUTE, Gtk::IconSize::DND, '')
       end
@@ -276,7 +276,7 @@ class Settings < Gtk::Window
     column = Gtk::TreeViewColumn.new('Icon', render)
     column.set_cell_data_func(render) do |col, cell, model, row|
       begin
-        cell.pixbuf = Gdk::Pixbuf.new(row[ICON]).scale(20, 20)
+        cell.pixbuf = GdkPixbuf::Pixbuf.new(file: row[ICON]).scale(20, 20)
       rescue
         cell.pixbuf = render_icon(Gtk::Stock::EXECUTE, Gtk::IconSize::BUTTON, '')
       end
